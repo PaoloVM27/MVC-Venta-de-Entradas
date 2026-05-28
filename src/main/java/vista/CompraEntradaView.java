@@ -28,8 +28,9 @@ public class CompraEntradaView extends javax.swing.JFrame {
 
         txtResultado.setEditable(false);
 
-        txtResultado.setText("Zonas disponibles:\n"
-            + compraController.obtenerZonasDisponibles());
+         txtResultado.setText(compraController.obtenerDatosConcierto()
+                + "\n\nZonas disponibles:\n"
+                + compraController.obtenerZonasDisponibles());
     }
 
     /**

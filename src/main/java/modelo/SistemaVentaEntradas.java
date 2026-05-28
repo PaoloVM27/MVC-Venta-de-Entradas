@@ -1,6 +1,5 @@
 package modelo;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class SistemaVentaEntradas {
@@ -21,7 +20,7 @@ public class SistemaVentaEntradas {
     private void inicializarDatos() {
         concierto = new Concierto(
                 "Concierto Aniversario UNMSM",
-                LocalDate.of(2026, 5, 12),
+                "2026-09-24",
                 "Estadio UNMSM"
         );
 
@@ -50,7 +49,9 @@ public class SistemaVentaEntradas {
     }
 
     public Cliente buscarClientePorDni(String dni) {
-        for (Cliente cliente : clientes) {
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente cliente = clientes.get(i);
+
             if (cliente.getDni().equals(dni)) {
                 return cliente;
             }
@@ -60,7 +61,9 @@ public class SistemaVentaEntradas {
     }
 
     public Administrador buscarAdministradorPorDni(String dni) {
-        for (Administrador admin : administradores) {
+        for (int i = 0; i < administradores.size(); i++) {
+            Administrador admin = administradores.get(i);
+
             if (admin.getDni().equals(dni)) {
                 return admin;
             }
@@ -96,12 +99,16 @@ public class SistemaVentaEntradas {
     public String listarZonasDisponibles() {
         return concierto.mostrarZonas();
     }
+    
+    public String obtenerDatosConcierto() {
+        return concierto.mostrarDatosConcierto();
+    }
 
     public Venta procesarVenta(Cliente cliente, String nombreZona, int cantidadEntradas, Tarjeta tarjeta) {
         Zona zona = buscarZona(nombreZona);
 
         if (cliente == null) {
-            throw new IllegalArgumentException("Cliente no válido.");
+            throw new IllegalArgumentException("Cliente no valido.");
         }
 
         if (zona == null) {
@@ -117,10 +124,11 @@ public class SistemaVentaEntradas {
         }
 
         if (tarjeta == null || !tarjeta.validarTarjeta()) {
-            throw new IllegalArgumentException("La tarjeta bancaria no es válida.");
+            throw new IllegalArgumentException("La tarjeta bancaria no es valida.");
         }
 
-        Venta venta = new Venta(cliente, zona, cantidadEntradas);
+        int idVenta = ventas.size() + 1;
+        Venta venta = new Venta(idVenta, cliente, zona, cantidadEntradas);
 
         PagoTarjeta pago = new PagoTarjeta(tarjeta, venta.getMontoTotal());
 
@@ -144,7 +152,9 @@ public class SistemaVentaEntradas {
     }
 
     public Venta buscarVentaPorId(int idVenta) {
-        for (Venta venta : ventas) {
+        for (int i = 0; i < ventas.size(); i++) {
+            Venta venta = ventas.get(i);
+
             if (venta.getIdVenta() == idVenta) {
                 return venta;
             }
@@ -160,9 +170,11 @@ public class SistemaVentaEntradas {
             return "No hay ventas registradas.";
         }
 
-        for (Venta venta : ventas) {
-            texto += venta.mostrarDetalleVenta();
-            texto += "\n-----------------------------\n";
+        for (int i = 0; i < ventas.size(); i++) {
+            Venta venta = ventas.get(i);
+
+            texto = texto + venta.mostrarDetalleVenta();
+            texto = texto + "\n-----------------------------\n";
         }
 
         return texto;

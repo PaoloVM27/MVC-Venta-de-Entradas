@@ -1,16 +1,15 @@
 package modelo;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Concierto {
 
     private String nombre;
-    private LocalDate fecha;
+    private String fecha;
     private String lugar;
     private ArrayList<Zona> zonas;
 
-    public Concierto(String nombre, LocalDate fecha, String lugar) {
+    public Concierto(String nombre, String fecha, String lugar) {
         this.nombre = nombre;
         this.fecha = fecha;
         this.lugar = lugar;
@@ -26,29 +25,35 @@ public class Concierto {
     }
 
     public boolean eliminarZona(String nombreZona) {
-        for (Zona zona : zonas) {
+        for (int i = 0; i < zonas.size(); i++) {
+            Zona zona = zonas.get(i);
+
             if (zona.getNombre().equalsIgnoreCase(nombreZona)) {
-                zonas.remove(zona);
+                zonas.remove(i);
                 return true;
             }
         }
+
         return false;
     }
 
     public Zona buscarZona(String nombreZona) {
-        for (Zona zona : zonas) {
+        for (int i = 0; i < zonas.size(); i++) {
+            Zona zona = zonas.get(i);
+
             if (zona.getNombre().equalsIgnoreCase(nombreZona)) {
                 return zona;
             }
         }
+
         return null;
     }
 
     public int obtenerCapacidadTotal() {
         int total = 0;
 
-        for (Zona zona : zonas) {
-            total = total + zona.getCapacidad();
+        for (int i = 0; i < zonas.size(); i++) {
+            total = total + zonas.get(i).getCapacidad();
         }
 
         return total;
@@ -57,8 +62,8 @@ public class Concierto {
     public int obtenerCapacidadDisponibleTotal() {
         int total = 0;
 
-        for (Zona zona : zonas) {
-            total = total + zona.getCapacidadDisponible();
+        for (int i = 0; i < zonas.size(); i++) {
+            total = total + zonas.get(i).getCapacidadDisponible();
         }
 
         return total;
@@ -67,7 +72,9 @@ public class Concierto {
     public String mostrarZonas() {
         String texto = "";
 
-        for (Zona zona : zonas) {
+        for (int i = 0; i < zonas.size(); i++) {
+            Zona zona = zonas.get(i);
+
             texto = texto + "Zona: " + zona.getNombre()
                     + " | Precio: S/ " + zona.getPrecio()
                     + " | Disponible: " + zona.getCapacidadDisponible()
@@ -76,12 +83,17 @@ public class Concierto {
 
         return texto;
     }
+    public String mostrarDatosConcierto() {
+        return "Concierto: " + nombre
+                + "\nFecha: " + fecha
+                + "\nLugar: " + lugar;
+    }
 
     public String getNombre() {
         return nombre;
     }
 
-    public LocalDate getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
@@ -97,7 +109,7 @@ public class Concierto {
         this.nombre = nombre;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -108,4 +120,5 @@ public class Concierto {
     public void setZonas(ArrayList<Zona> zonas) {
         this.zonas = zonas;
     }
+    
 }

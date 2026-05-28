@@ -1,23 +1,19 @@
 package modelo;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class Venta {
-
-    private static int contadorVentas = 1;
-    private static int contadorEntradas = 1;
 
     private int idVenta;
     private Cliente cliente;
     private Zona zona;
     private ArrayList<Entrada> entradas;
-    private LocalDateTime fechaVenta;
+    private String fechaVenta;
     private double montoTotal;
     private String estado;
-    private PagoTarjeta pago;
 
-    public Venta(Cliente cliente, Zona zona, int cantidadEntradas) {
+    public Venta(int idVenta, Cliente cliente, Zona zona, int cantidadEntradas) {
 
         if (!validarCantidad(cantidadEntradas)) {
             throw new IllegalArgumentException("La cantidad de entradas debe ser entre 1 y 4.");
@@ -27,15 +23,15 @@ public class Venta {
             throw new IllegalArgumentException("No hay capacidad disponible en la zona seleccionada.");
         }
 
-        this.idVenta = contadorVentas++;
+        this.idVenta = idVenta;
         this.cliente = cliente;
         this.zona = zona;
         this.entradas = new ArrayList<>();
-        this.fechaVenta = LocalDateTime.now();
+        this.fechaVenta = LocalDate.now().toString();
         this.estado = "Pendiente";
 
         for (int i = 0; i < cantidadEntradas; i++) {
-            Entrada entrada = new Entrada(contadorEntradas++, zona);
+            Entrada entrada = new Entrada(i + 1, zona);
             entradas.add(entrada);
         }
 
@@ -59,7 +55,8 @@ public class Venta {
         if (estado.equals("Confirmada")) {
             estado = "Anulada";
 
-            for (Entrada entrada : entradas) {
+            for (int i = 0; i < entradas.size(); i++) {
+                Entrada entrada = entradas.get(i);
                 entrada.anular();
             }
 
@@ -71,7 +68,7 @@ public class Venta {
     }
 
     public String mostrarDetalleVenta() {
-        String texto = "Venta N° " + idVenta
+        String texto = "Venta Nro. " + idVenta
                 + "\nCliente: " + cliente.getNombres() + " " + cliente.getApellidos()
                 + "\nZona: " + zona.getNombre()
                 + "\nCantidad de entradas: " + entradas.size()
@@ -80,8 +77,9 @@ public class Venta {
                 + "\nFecha: " + fechaVenta
                 + "\nEntradas:\n";
 
-        for (Entrada entrada : entradas) {
-            texto += entrada.mostrarDatos() + "\n";
+        for (int i = 0; i < entradas.size(); i++) {
+            Entrada entrada = entradas.get(i);
+            texto = texto + entrada.mostrarDatos() + "\n";
         }
 
         return texto;
@@ -103,7 +101,7 @@ public class Venta {
         return entradas;
     }
 
-    public LocalDateTime getFechaVenta() {
+    public String getFechaVenta() {
         return fechaVenta;
     }
 
@@ -115,6 +113,10 @@ public class Venta {
         return estado;
     }
 
+    public void setIdVenta(int idVenta) {
+        this.idVenta = idVenta;
+    }
+
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
@@ -122,6 +124,10 @@ public class Venta {
     public void setZona(Zona zona) {
         this.zona = zona;
         this.montoTotal = calcularTotal();
+    }
+
+    public void setFechaVenta(String fechaVenta) {
+        this.fechaVenta = fechaVenta;
     }
 
     public void setEstado(String estado) {

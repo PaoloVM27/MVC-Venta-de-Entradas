@@ -16,6 +16,9 @@ public class CompraController {
     public String obtenerZonasDisponibles() {
         return sistema.listarZonasDisponibles();
     }
+    public String obtenerDatosConcierto() {
+        return sistema.obtenerDatosConcierto();
+    }
 
     public boolean registrarCliente(Cliente cliente) {
         return sistema.registrarCliente(cliente);
